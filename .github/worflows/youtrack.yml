@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened]
+    branches: [ main, test ]
+
+jobs:
+  notify-youtrack-opened:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call Youtrack Api
+      run: |
+        echo "PR title: ${{ github.event.pull_request.title }}"
+        echo "PR body: ${{ github.event.pull_request.body }}"
+        TICKETS=$(echo "${{ github.event.pull_request.title }} ${{ github.event.pull_request.body }}" | grep -oE 'BCK-[0-9]+')
+        echo "Found tickets: $TICKETS"
+        # curl -X POST \
+        #   -H "Authorization: Bearer $YOUTRACK_TOKEN" \
+        #   -H "Content-Type: application/json" \
+        #   -d '{"message": "Pull request opened: ${{ github.event.pull_request.title }}", "tickets": "'$TICKETS'"}' \
+        #   https://youtrack.example.com/api/notifications
+      env:
+        YOUTRACK_TOKEN: ${{ secrets.YOUTRACK_TOKEN }}
+        YOUTRACK_URL: https://pomona.youtrack.cloud
