@@ -10,7 +10,3 @@ hi therer
 
 - one
 - two
-- three
-- foue
-- five
-- six 
